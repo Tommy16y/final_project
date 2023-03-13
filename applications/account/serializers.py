@@ -2,11 +2,12 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from applications.account.send_email import send_activation_code, send_reset_password_code
 from applications.account.task import send_activation_code as celery_register
-
+import datetime
 User = get_user_model()  # CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    date_of_birth = serializers.DateField(format='%Y-%m-%d')
     password2 = serializers.CharField(
         required=True,
         min_length=6,
@@ -16,12 +17,41 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         # model = CustomUser
         model = User
-        fields = ('email','username','password', 'password2',)
+        fields = ('email','username','password', 'password2','date_of_birth',)
     
 
     def validate_email(self, email):
-        print('Hello')
+        print('Okay')
         return email
+    
+    def validate_date_of_birth(self,date_of_birth):
+        self.dayss(date_of_birth)
+        
+        if date_of_birth ==datetime.date.today():
+            raise serializers.ValidationError('Дата рождения не может быть сегодня!')
+        
+        elif self.dayss(date_of_birth)<1825 and self.dayss(date_of_birth)>0:
+            raise serializers.ValidationError('Извините,на нашем сайте можно регистрироваться с 5 лет')
+        
+        elif date_of_birth>datetime.date.today():
+            raise serializers.ValidationError('Дата рождения не может быть в будущем!')
+        
+        elif self.dayss(date_of_birth)>36500:
+            raise serializers.ValidationError('вам не может быть 100 лет')
+        
+        return date_of_birth
+
+    def dayss(self,date_of_birth):
+        d2 = str(datetime.date.today()).split('-')
+        d1 = str(date_of_birth).split('-')
+        aa = datetime.date(int(d2[0]),int(d2[1]),int(d2[2]))
+        bb = datetime.date(int(d1[0]),int(d1[1]),int(d1[2]))
+        cc = aa-bb
+        dd = str(cc)
+        dd = (dd.split()[0])
+        return int(dd)
+
+
     
     def validate(self, attrs):
         p1 = attrs.get('password')
@@ -32,10 +62,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
     
-
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        # send_activation_code(user.email, user.activation_code)
         celery_register.delay(user.email, user.activation_code)
         
         return user
@@ -85,4 +113,23 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         user.activation_code = ''
         user.save(update_fields=['password', 'activation_code'])
 
+
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        if len(value) < 1:
+            raise serializers.ValidationError("Пароль должен содержать хотя бы 2 символа")
+
+        return value
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Старый пароль неверный")
+
+        return value
 

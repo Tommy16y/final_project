@@ -8,21 +8,21 @@ from django.contrib.auth.hashers import make_password
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password,username, **extra_fields):
+    def _create_user(self, email, password,username,date_of_birth, **extra_fields):
         email = self.normalize_email(email)
         
-        user = self.model(email=email,username=username, **extra_fields)
+        user = self.model(email=email,username=username,date_of_birth=date_of_birth, **extra_fields)
         user.password = make_password(password)  # '1' -> sdjfhue8rb3457fgidysuif
         user.create_activation_code()
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password,username, **extra_fields):
+    def create_user(self, email, password,username,date_of_birth, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-        return self._create_user(email, password,username, **extra_fields)
+        return self._create_user(email, password,username,date_of_birth, **extra_fields)
 
-    def create_superuser(self, email, password,username,**extra_fields):
+    def create_superuser(self, email, password,username,date_of_birth,**extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self._create_user(email, password,username,**extra_fields)
+        return self._create_user(email, password,username,date_of_birth,**extra_fields)
 
 
 class CustomUser(AbstractUser):
@@ -41,11 +41,11 @@ class CustomUser(AbstractUser):
     is_active = models.BooleanField(default=False)
     username = models.CharField(max_length=20,unique=True)
     activation_code = models.CharField(max_length=50, blank=True)
-
+    date_of_birth = models.DateField(default=None)
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username',]
+    REQUIRED_FIELDS = ['username','date_of_birth']
 
     def __str__(self):
         return self.email
