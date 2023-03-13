@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'drf_yasg',
 
 
     #
@@ -143,7 +144,7 @@ REST_FRAMEWORK = {
     )
 }
 
-# AUTH_USER_MODEL = 'account.CustomUser'
+AUTH_USER_MODEL = 'account.CustomUser'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
