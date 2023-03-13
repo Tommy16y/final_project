@@ -24,6 +24,35 @@ class RegisterSerializer(serializers.ModelSerializer):
         print('Okay')
         return email
     
+    def validate_date_of_birth(self,date_of_birth):
+        self.dayss(date_of_birth)
+        
+        if date_of_birth ==datetime.date.today():
+            raise serializers.ValidationError('Дата рождения не может быть сегодня!')
+        
+        elif self.dayss(date_of_birth)<1825 and self.dayss(date_of_birth)>0:
+            raise serializers.ValidationError('Извините,на нашем сайте можно регистрироваться с 5 лет')
+        
+        elif date_of_birth>datetime.date.today():
+            raise serializers.ValidationError('Дата рождения не может быть в будущем!')
+        
+        elif self.dayss(date_of_birth)>36500:
+            raise serializers.ValidationError('вам не может быть 100 лет')
+        
+        return date_of_birth
+
+    def dayss(self,date_of_birth):
+        d2 = str(datetime.date.today()).split('-')
+        d1 = str(date_of_birth).split('-')
+        aa = datetime.date(int(d2[0]),int(d2[1]),int(d2[2]))
+        bb = datetime.date(int(d1[0]),int(d1[1]),int(d1[2]))
+        cc = aa-bb
+        dd = str(cc)
+        dd = (dd.split()[0])
+        return int(dd)
+
+
+    
     def validate(self, attrs):
         p1 = attrs.get('password')
         p2 = attrs.pop('password2')
@@ -33,15 +62,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return attrs
     
-    def validate_date_of_birth(self, date_of_birth):
-        date1=date_of_birth
-
-        if date1 == datetime.date.today():
-            raise serializers.ValidationError('Дата рождения не может быть сегодня!')
-
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        # send_activation_code(user.email, user.activation_code)
         celery_register.delay(user.email, user.activation_code)
         
         return user
