@@ -17,7 +17,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         # model = CustomUser
         model = User
-        fields = ('email','username','password', 'password2','date_of_birth',)
+        fields = ('email','login','password', 'password2','date_of_birth',)
     
 
     def validate_email(self, email):
@@ -58,7 +58,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         p2 = attrs.pop('password2')
 
         if p1 != p2:
-            raise serializers.ValidationError('Password did not match!!!')
+            raise serializers.ValidationError('Пароли не совпадают!')
 
         return attrs
     
