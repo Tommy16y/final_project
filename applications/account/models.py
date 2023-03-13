@@ -41,7 +41,7 @@ class CustomUser(AbstractUser):
     is_active = models.BooleanField(default=False)
     username = models.CharField(max_length=20,unique=True)
     activation_code = models.CharField(max_length=50, blank=True)
-
+    date_of_birth = models.DateField()
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
