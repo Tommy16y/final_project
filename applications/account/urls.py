@@ -18,4 +18,6 @@ urlpatterns = [
 
     path('users/',ProfileSerializer.as_view()),
 
+    path('detail/<int:id>/',DetailUserSerializer.as_view()),
+
 ]
