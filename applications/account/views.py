@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
-from applications.account.serializers import RegisterSerializer, ForgotPasswordSerializer,ForgotPasswordCompleteSerializer,ChangePasswordSerializer,UserProfileSerializer,UsersSerializer
+from applications.account.serializers import RegisterSerializer, ForgotPasswordSerializer,ForgotPasswordCompleteSerializer,ChangePasswordSerializer,UserProfileSerializer,UsersSerializer,UserrSerializer
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model  
 from django.contrib.auth.hashers import check_password
@@ -65,23 +65,17 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            # проверяем старый пароль
+            
             old_password = serializer.data.get("old_password")
             if check_password(old_password, self.object.password):
-                # сохраняем новый пароль
+               
                 self.object.set_password(serializer.data.get("new_password"))
                 self.object.save()
-                # response = {
-                #     'status': 'success',
-                #     'message': 'Пароль успешно изменен'
-                # }
+            
                 return Response('Пароль успешно изменен', status=status.HTTP_200_OK)
 
             else:
-                # response = {
-                #     'status': 'failed',
-                #     'message': 'Старый пароль неверный'
-                # }   
+                
                 return Response('Старый пароль неверный!', status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -106,10 +100,12 @@ class ProfileSerializer(generics.ListAPIView):
     queryset = User.objects.filter(is_superuser=False)
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['login']
-    # ordering_fields = ['login']
-    # def get_queryset(self):
-    #     queryset = User.objects.get(user=self.request.user)
 
-
-# class DetailUserSerializer(generics.RetrieveAPIView):
-#     pass
+class DetailUserSerializer(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = UserrSerializer
+    queryset = User.objects.all()
+    lookup_field = 'id'
+    
+    def get(self,request,*args,**kwargs):
+        return self.retrieve(request,*args,**kwargs)
