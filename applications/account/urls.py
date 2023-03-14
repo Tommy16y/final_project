@@ -20,4 +20,6 @@ urlpatterns = [
 
     path('detail/<int:id>/',DetailUserSerializer.as_view()),
 
+    path('logout/',LogoutAPIView.as_view()),
+
 ]

@@ -9,6 +9,7 @@ from rest_framework import generics, status
 from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter ,SearchFilter
+from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 class RegisterAPIView(APIView):
@@ -20,6 +21,17 @@ class RegisterAPIView(APIView):
         serializer.save()
 
         return Response('Вы успешно зарегистрировались. Вам отправлено письмо с активацией', status=201)
+    
+
+class LogoutAPIView(APIView):
+    permission_classes =[IsAuthenticated]
+    def post(self,request):
+        try:
+            user = request.user
+            Token.objects.get(user=user).delete()
+            return Response('Вы успешно разлогинились',status=200)
+        except:
+            return Response(status=403)
 
 
 class ActivationView(APIView):
