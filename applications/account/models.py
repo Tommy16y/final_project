@@ -51,6 +51,7 @@ class CustomUser(AbstractUser):
     following = models.IntegerField(default=0)
     
     
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['login','date_of_birth']
 
