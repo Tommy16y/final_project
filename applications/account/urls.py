@@ -14,4 +14,8 @@ urlpatterns = [
 
     path('changepassword/', ChangePasswordView.as_view()),
 
+    path('customization/',UserUpdateAPIView.as_view()),
+
+    path('users/',ProfileSerializer.as_view()),
+
 ]

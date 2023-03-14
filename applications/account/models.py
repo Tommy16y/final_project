@@ -47,6 +47,8 @@ class CustomUser(AbstractUser):
     avatar=models.ImageField(upload_to='accounts/',blank=True,null=True)
     about_me = models.CharField(max_length=200,blank=True,null=True)
     objects = UserManager()
+    followers = models.IntegerField(default=0)
+    following = models.IntegerField(default=0)
     
     
     USERNAME_FIELD = 'email'
