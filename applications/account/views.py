@@ -104,8 +104,12 @@ class ProfileSerializer(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UsersSerializer
     queryset = User.objects.filter(is_superuser=False)
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['login']
-    ordering_fields = ['login']
+    # ordering_fields = ['login']
     # def get_queryset(self):
     #     queryset = User.objects.get(user=self.request.user)
+
+
+# class DetailUserSerializer(generics.RetrieveAPIView):
+#     pass
