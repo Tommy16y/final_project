@@ -7,8 +7,8 @@ User = get_user_model()  # CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    
     date_of_birth = serializers.DateField(format='%Y-%m-%d')
-    login = serializers.CharField(unique=True)
     password2 = serializers.CharField(
         required=True,
         min_length=6,
