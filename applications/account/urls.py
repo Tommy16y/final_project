@@ -16,9 +16,9 @@ urlpatterns = [
 
     path('customization/',UserUpdateAPIView.as_view()),
 
-    path('users/',ProfileSerializer.as_view()),
+    path('users/',ProfileView.as_view()),
 
-    path('detail/<int:id>/',DetailUserSerializer.as_view()),
+    path('detail/<int:id>/',DetailUserView.as_view()),
 
     path('logout/',LogoutAPIView.as_view()),
 

@@ -106,14 +106,14 @@ class UserUpdateAPIView(APIView):
 
 
 
-class ProfileSerializer(generics.ListAPIView):
+class ProfileView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UsersSerializer
     queryset = User.objects.filter(is_superuser=False)
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['login']
 
-class DetailUserSerializer(generics.RetrieveAPIView):
+class DetailUserView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UserrSerializer
     queryset = User.objects.all()
