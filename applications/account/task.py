@@ -6,7 +6,7 @@ from decouple import config
 def send_activation_code(email, code):
     send_mail(
         'Py25 project', # title
-        config(f'EMAIL_LINKS'),# body
+        f'http://35.234.109.231/api/account/activate/{code}',# body
         config('EMAIL_ADRESS'), # from
         [email] # to
     )

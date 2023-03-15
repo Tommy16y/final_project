@@ -161,4 +161,4 @@ class UsersSerializer(serializers.ModelSerializer):
 class UserrSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('avatar','login','name','about_me')
+        fields = ('avatar','login','name','about_me','created_at','followers','following',)
