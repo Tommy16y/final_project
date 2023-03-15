@@ -7,7 +7,7 @@ User = get_user_model()  # CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    
+
     date_of_birth = serializers.DateField(format='%Y-%m-%d')
     password2 = serializers.CharField(
         required=True,
@@ -31,8 +31,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         if date_of_birth ==datetime.date.today():
             raise serializers.ValidationError('Дата рождения не может быть сегодня!')
         
-        elif self.dayss(date_of_birth)<1825 and self.dayss(date_of_birth)>0:
-            raise serializers.ValidationError('Извините,на нашем сайте можно регистрироваться с 5 лет')
+        # elif self.dayss(date_of_birth)<1825 and self.dayss(date_of_birth)>0:
+        #     raise serializers.ValidationError('Извините,на нашем сайте можно регистрироваться с 5 лет')
         
         elif date_of_birth>datetime.date.today():
             raise serializers.ValidationError('Дата рождения не может быть в будущем!')

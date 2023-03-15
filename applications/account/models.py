@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
-
+from django import forms
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -64,3 +64,17 @@ class CustomUser(AbstractUser):
         import uuid
         code = str(uuid.uuid4())
         self.activation_code = code
+
+
+
+
+
+
+# class CustomSignupForm(forms.Form):
+#     login = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'placeholder':('login')}))
+#     date_of_birth = forms.DateField(widget=forms.TextInput(attrs={'placeholder':('date_of_birth')}))
+#     def signup(self, request, user):
+#         user.login = self.cleaned_data['login']
+#         user.date_of_birth = self.cleaned_data['date_of_birth']
+
+#         user.save()
