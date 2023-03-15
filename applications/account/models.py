@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password,login,date_of_birth, **extra_fields):
+    def create_user(self, email, password=None,login=None,date_of_birth=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password,login,date_of_birth, **extra_fields)
@@ -39,10 +39,10 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
-    login = models.CharField(max_length=20,unique=True)
+    login = models.CharField(max_length=20,unique=True,blank=True,null=True)
     username=None
     activation_code = models.CharField(max_length=50, blank=True)
-    date_of_birth = models.DateField(default=None)
+    date_of_birth = models.DateField(default=0,null=True)
     name = models.CharField(null=True,blank=True,max_length=20)
     avatar=models.ImageField(upload_to='accounts/',blank=True,null=True)
     about_me = models.CharField(max_length=200,blank=True,null=True)
