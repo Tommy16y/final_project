@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from applications.account.send_email import  send_reset_password_code,send_activation_code
+from applications.account.send_email import  send_reset_password_code
 from applications.account.task import send_activation_code as celery_register
 import datetime
 User = get_user_model()  # CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    
     date_of_birth = serializers.DateField(format='%Y-%m-%d')
     password2 = serializers.CharField(
         required=True,
