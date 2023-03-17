@@ -11,5 +11,3 @@ celery
 drf-yasg
 django-filter
 social-auth-app-django
-python-social-auth[django]
-django-allauth

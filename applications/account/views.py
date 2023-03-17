@@ -10,6 +10,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter ,SearchFilter
 from rest_framework.authtoken.models import Token
+from rest_framework.viewsets import ViewSet,ModelViewSet
+from rest_framework.decorators import action
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# from applications.feedback.models import Following
+
+
+
 
 User = get_user_model()
 class RegisterAPIView(APIView):
@@ -113,6 +121,9 @@ class ProfileView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['login']
 
+
+    
+
 class DetailUserView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UserrSerializer
@@ -121,3 +132,37 @@ class DetailUserView(generics.RetrieveAPIView):
     
     def get(self,request,*args,**kwargs):
         return self.retrieve(request,*args,**kwargs)
+
+
+
+
+
+class VkAuthSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        return token
+
+class VkAuthView(TokenObtainPairView):
+    serializer_class = VkAuthSerializer
+
+
+
+
+# class AccountModelViewSet(ModelViewSet):
+#     queryset = User.objects.filter(is_superuser=False)
+#     serializer_class = UserrSerializer
+
+
+#     @action(methods=['POST'], detail=True) #localhost:8000/api/v1/post/1/like
+#     def like(self, request, pk, *args, **kwargs):
+#         user = request.user
+#         print(user)
+        
+#         following_obj, _ = Following.objects.get_or_create(owner = user,owner2_id= pk)
+#         following_obj.is_follow = not following_obj.is_follow
+#         following_obj.save() 
+#         status = 'follow'
+#         if not following_obj.is_follow:
+#             status = 'unfollow'
+#         return Response({'status':status})

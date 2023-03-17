@@ -21,5 +21,9 @@ urlpatterns = [
     path('detail/<int:id>/',DetailUserView.as_view()),
 
     path('logout/',LogoutAPIView.as_view()),
+    
+    # path('follow',AccountModelViewSet.as_view()),
+
+
 
 ]

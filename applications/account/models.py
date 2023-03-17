@@ -43,13 +43,14 @@ class CustomUser(AbstractUser):
     username=None
     activation_code = models.CharField(max_length=50, blank=True)
     date_of_birth = models.DateField(default=0,null=True)
-    name = models.CharField(null=True,blank=True,max_length=20)
+    first_name = models.CharField(null=True,blank=True,max_length=20)
     avatar=models.ImageField(upload_to='accounts/',blank=True,null=True)
     about_me = models.CharField(max_length=200,blank=True,null=True)
     objects = UserManager()
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
     
     
     
@@ -78,3 +79,6 @@ class CustomUser(AbstractUser):
 #         user.date_of_birth = self.cleaned_data['date_of_birth']
 
 #         user.save()
+
+
+

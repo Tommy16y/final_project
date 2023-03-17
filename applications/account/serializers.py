@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from applications.account.send_email import  send_reset_password_code
 from applications.account.task import send_activation_code as celery_register
+# from applications.feedback.models import Following
+
 import datetime
 User = get_user_model()  # CustomUser
 
@@ -137,16 +139,16 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
     about_me = serializers.CharField(required=False)
     avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ('name', 'about_me', 'avatar')
+        fields = ('first_name', 'about_me', 'avatar')
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.about_me = validated_data.get('about_me', instance.about_me)
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
@@ -156,10 +158,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('avatar','login','name')
+        fields = ('avatar','login','first_name')
 
 
 class UserrSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('avatar','login','name','about_me','created_at','followers','following',)
+        fields = ('avatar','login','first_name','about_me','created_at','followers','following',)
+
+    # def to_representation(self, instance):
+    #     representation= super().to_representation(instance)
+
+    #     representation['followers_count'] = instance.following.filter(is_follow=True).count()
+
+    #     representation['following_count'] = instance.follower.filter(is_follow=True).count()
+
+
+    #     return representation
+
+
+
+    
