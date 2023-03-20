@@ -17,6 +17,7 @@ class UserManager(BaseUserManager):
         user.password = make_password(password)  # '1' -> sdjfhue8rb3457fgidysuif
         user.create_activation_code()
         user.save(using=self._db)
+        Profile.objects.create(owner = user,profile_id = user.id)
         return user
 
     def create_user(self, email, password=None,login=None, **extra_fields):

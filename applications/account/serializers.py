@@ -42,7 +42,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         celery_register.delay(user.email, user.activation_code)
         # send_activation_code(user.email, user.activation_code)
-        Profile.objects.create(owner = user,profile_id = user.id)
+        # Profile.objects.create(owner = user,profile_id = user.id)
         
         return user
 
