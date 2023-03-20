@@ -11,6 +11,11 @@ class Post(models.Model):
     # repost = models.ManyToManyField(User,related_name='reposts',blank=True)
     # updated_at = models.DateTimeField(auto_now=True)
 
+
+
+    def __str__(self):
+        return f'{self.title} '
+
 class PostMedia(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='media')
     media = models.FileField(upload_to='post_media') 
@@ -22,6 +27,10 @@ class Repost(models.Model):
     repost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='reposttt')
     created_at = models.DateTimeField(auto_now_add=True)
     owner2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reposts2',verbose_name='владелец репоста')
+
+
+    def __str__(self):
+        return f'{self.owner} -repost {self.repost}'
 
 
 

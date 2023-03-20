@@ -42,7 +42,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         celery_register.delay(user.email, user.activation_code)
         # send_activation_code(user.email, user.activation_code)
-        Profile.objects.create(owner = user,profile_id = user.id)
+        # Profile.objects.create(owner = user,profile_id = user.id)
         
         return user
 
@@ -99,8 +99,8 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
     def validate_new_password(self, value):
-        if len(value) < 1:
-            raise serializers.ValidationError("Пароль должен содержать хотя бы 2 символа")
+        if len(value) < 5:
+            raise serializers.ValidationError("Пароль должен быть от 6 и выше символов ")
 
         return value
 

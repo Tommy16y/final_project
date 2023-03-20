@@ -17,6 +17,7 @@ class UserManager(BaseUserManager):
         user.password = make_password(password)  # '1' -> sdjfhue8rb3457fgidysuif
         user.create_activation_code()
         user.save(using=self._db)
+        Profile.objects.create(owner = user,profile_id = user.id)
         return user
 
     def create_user(self, email, password=None,login=None, **extra_fields):
@@ -55,7 +56,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['login']
 
     def __str__(self):
-        return self.email
+        return f'{self.email}'
 
     def create_activation_code(self):
         import uuid
@@ -75,7 +76,7 @@ class Profile(models.Model):
     following = models.IntegerField(default=0)
     avatar=models.ImageField(upload_to='accounts/',blank=True,null=True)
     about_me = models.CharField(max_length=200,blank=True,null=True)
-    date_of_birth = models.DateField(default=None,null=True)
+    date_of_birth = models.DateField(default=None,null=True,blank=True)
 
 
 
