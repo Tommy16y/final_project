@@ -10,3 +10,4 @@ redis
 celery
 drf-yasg
 django-filter
+social-auth-app-django
