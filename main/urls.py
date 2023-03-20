@@ -38,6 +38,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger')),
     path('api/account/',include('applications.account.urls')),
+    path('api/post/',include('applications.post.urls')),
+    path('api/feedback/',include('applications.feedback.urls')),
 
     path('api/v1/auth/vk/', include('social_django.urls', namespace='social')),
     path('auth/token/', TokenObtainPairView.as_view, name='token_obtain_pair'),
