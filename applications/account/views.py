@@ -143,7 +143,7 @@ class VkAuthView(TokenObtainPairView):
 class ProfileUpdateAPIView(generics.GenericAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated]
-    serializer_class = SubSerializer
+    serializer_class = ProfileSerializer
     lookup_field = ['profile_id','login',]
     search_fields = ['login',] 
 

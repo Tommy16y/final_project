@@ -202,11 +202,20 @@ SWAGGER_SETTINGS = {
 
 
 AUTHENTICATION_BACKENDS = [
+    # 'social_core.backends.open_id.OpenIdAuth',
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# SOCIAL_AUTH_AUTHENTICATION_BACKENDS = {
+#     'social_core.backends.vk.VKAppOAuth2',
+#     'social_core.backends.vk.VKontakteOpenAPI',
+
+# }
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+
+# SOCIAL_AUTH_VK_OPENAPI_APP_ID = 'http://127.0.0.1:8000'

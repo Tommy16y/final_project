@@ -114,13 +114,13 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('avatar','login','first_name')
+        fields = ('login',)
 
 
 class UserrSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('avatar','login','first_name','about_me','created_at','followers','following',)
+        fields = ('login','created_at',)
 
    
 
@@ -174,8 +174,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 
+# class SubSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Profile
+#         fields = ['profile_id', 'owner', 'followers', 'following']
+#         read_only_fields = ['profile_id','owner'm']
+
+
+
 class SubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['profile_id', 'login', 'followers', 'following']
-        read_only_fields = ['profile_id', 'login']
+        fields = ['id', 'login', 'followers', 'following']
+        read_only_fields = ['id', 'login']

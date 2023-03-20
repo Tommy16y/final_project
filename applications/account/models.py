@@ -52,7 +52,7 @@ class CustomUser(AbstractUser):
     
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['login','date_of_birth']
+    REQUIRED_FIELDS = ['login']
 
     def __str__(self):
         return self.email
