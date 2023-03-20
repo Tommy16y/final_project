@@ -36,4 +36,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger')),
     path('api/account/',include('applications.account.urls')),
+    path('api/post/',include('applications.post.urls')),
+    path('api/feedback/',include('applications.feedback.urls'))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
