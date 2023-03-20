@@ -190,3 +190,6 @@ class UnsubscribeView(APIView):
             return Response({'success': 'Вы отписались от аккаунта.'})
         else:
             return Response({'error': 'Вы не подписаны.'})
+        
+
+

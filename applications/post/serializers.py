@@ -2,8 +2,9 @@ from rest_framework import serializers
 from applications.post.models import Post,PostMedia,Repost
 from applications.feedback.serializers import LikeSerializer
 from applications.feedback.models import Like
+from django.contrib.auth import get_user_model  
 
-
+User = get_user_model()
 class PostMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -14,7 +15,7 @@ class PostMediaSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True,read_only=True)
-    owner = serializers.ReadOnlyField(source='owner.email')
+    owner = serializers.ReadOnlyField(source='owner.login')
     likes = LikeSerializer(many=True,read_only=True)
 
     class Meta:
@@ -80,3 +81,38 @@ class RepostSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     
+
+# class MyPostSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = '__all__'
+
+    
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     qury = instance.posts.all()
+    #     a = []
+    #     for i in qury:
+    #         a.append(PostSerializer(i).data)
+    #     representation['post'] = a
+    #     representation['easy'] = 'easy'
+    #     return representation
+
+class MyPostSerializer(serializers.ModelSerializer):
+    media = PostMediaSerializer(many=True,read_only=True)
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+    # def to_representation(self, instance):
+        # representation = super().to_representation(instance)
+        # qury = instance.post.all()
+        # a = []
+        # for i in qury:
+        #     a.append(PostSerializer(i).data)
+        # representation['post'] = a
+        # return representation
+ 
+
+
+
