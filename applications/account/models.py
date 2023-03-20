@@ -56,7 +56,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['login']
 
     def __str__(self):
-        return self.email
+        return f'{self.email}'
 
     def create_activation_code(self):
         import uuid
@@ -76,7 +76,7 @@ class Profile(models.Model):
     following = models.IntegerField(default=0)
     avatar=models.ImageField(upload_to='accounts/',blank=True,null=True)
     about_me = models.CharField(max_length=200,blank=True,null=True)
-    date_of_birth = models.DateField(default=None,null=True)
+    date_of_birth = models.DateField(default=None,null=True,blank=True)
 
 
 

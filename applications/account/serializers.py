@@ -99,8 +99,8 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
     def validate_new_password(self, value):
-        if len(value) < 1:
-            raise serializers.ValidationError("Пароль должен содержать хотя бы 2 символа")
+        if len(value) < 5:
+            raise serializers.ValidationError("Пароль должен быть от 6 и выше символов ")
 
         return value
 
