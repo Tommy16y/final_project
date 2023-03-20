@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
-from applications.account.serializers import RegisterSerializer, ForgotPasswordSerializer,ForgotPasswordCompleteSerializer,ChangePasswordSerializer,UserProfileSerializer,UsersSerializer,UserrSerializer
+from applications.account.serializers import RegisterSerializer, ForgotPasswordSerializer,ForgotPasswordCompleteSerializer,ChangePasswordSerializer,UsersSerializer,UserrSerializer,ProfileSerializer,SubSerializer
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model  
 from django.contrib.auth.hashers import check_password
@@ -15,6 +15,9 @@ from rest_framework.decorators import action
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from applications.feedback.models import Following
+from applications.account.models import Profile
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
 
 
 
@@ -27,6 +30,8 @@ class RegisterAPIView(APIView):
         print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        
+        
 
         return Response('Вы успешно зарегистрировались. Вам отправлено письмо с активацией', status=201)
     
@@ -99,19 +104,6 @@ class ChangePasswordView(generics.UpdateAPIView):
                 return Response('Старый пароль неверный!', status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-class UserUpdateAPIView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request):
-        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class ProfileView(generics.ListAPIView):
@@ -148,21 +140,53 @@ class VkAuthView(TokenObtainPairView):
 
 
 
+class ProfileUpdateAPIView(generics.GenericAPIView):
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubSerializer
+    lookup_field = ['profile_id','login',]
+    search_fields = ['login',] 
 
-# class AccountModelViewSet(ModelViewSet):
-#     queryset = User.objects.filter(is_superuser=False)
-#     serializer_class = UserrSerializer
+    def get_object(self):
+        return self.request.user.profile
+
+    def patch(self, request, *args, **kwargs):
+        profile_instance = self.get_object()
+        profile_serializer = self.get_serializer(
+            profile_instance, data=request.data, partial=True
+        )
+        if profile_serializer.is_valid():
+            profile_serializer.save()
+            return Response(profile_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#     @action(methods=['POST'], detail=True) #localhost:8000/api/v1/post/1/like
-#     def like(self, request, pk, *args, **kwargs):
-#         user = request.user
-#         print(user)
-        
-#         following_obj, _ = Following.objects.get_or_create(owner = user,owner2_id= pk)
-#         following_obj.is_follow = not following_obj.is_follow
-#         following_obj.save() 
-#         status = 'follow'
-#         if not following_obj.is_follow:
-#             status = 'unfollow'
-#         return Response({'status':status})
+class SubscribeView(APIView):
+    def post(self, request, profile_id):
+        profile = get_object_or_404(Profile, profile_id=profile_id)
+        user_profile = request.user.profile
+        if not user_profile.followw.filter(profile_id=profile_id).exists():
+            user_profile.followw.add(profile)
+            user_profile.following += 1
+            user_profile.save()
+            profile.followers += 1
+            profile.save()
+            return Response({'success': 'Вы подписались на аккаунт.'})
+        else:
+            return Response({'error': 'Вы уже подписаны.'})
+
+
+class UnsubscribeView(APIView):
+    def post(self, request, profile_id):
+        profile = get_object_or_404(Profile, profile_id=profile_id)
+        user_profile = request.user.profile
+        if user_profile.followw.filter(profile_id=profile_id).exists():
+            user_profile.followw.remove(profile)
+            user_profile.following -= 1
+            user_profile.save()
+            profile.followers -= 1
+            profile.save()
+            return Response({'success': 'Вы отписались от аккаунта.'})
+        else:
+            return Response({'error': 'Вы не подписаны.'})

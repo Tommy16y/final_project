@@ -14,8 +14,6 @@ urlpatterns = [
 
     path('changepassword/', ChangePasswordView.as_view()),
 
-    path('customization/',UserUpdateAPIView.as_view()),
-
     path('users/',ProfileView.as_view()),
 
     path('detail/<int:id>/',DetailUserView.as_view()),
@@ -24,6 +22,13 @@ urlpatterns = [
     
     # path('follow',AccountModelViewSet.as_view()),
 
+
+    path('customization/',ProfileUpdateAPIView.as_view()),
+    
+    # path('subscribe/<int:pk>/', subscribe),
+    # path('unsubscribe/<int:pk>/', unsubscribe),
+    path('profiles/<int:profile_id>/sub/',SubscribeView.as_view()),
+    path('profiles/<int:profile_id>/unsub/',UnsubscribeView.as_view()),
 
 
 ]
