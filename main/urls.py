@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/v1/auth/vk/', include('social_django.urls', namespace='social')),
     path('auth/token/', TokenObtainPairView.as_view, name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view, name='token_refresh'),
+    path('api/v1/auth/vk/login/<str:backend>/', include('social_django.urls', namespace='sociall')),
 
     path('api/v1/auth/vk/token/', VkAuthView.as_view()),
 
