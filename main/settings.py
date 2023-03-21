@@ -72,7 +72,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -165,10 +165,10 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 #     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 # }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=600),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': None,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
@@ -225,3 +225,17 @@ SOCIAL_AUTH_CUSTOMVKOAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+
+
+# SOCIAL_AUTH_VK_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'redirect_uri': 'http://127.0.0.1:8000/api/v1/auth/vk/exchange_token/'}
+
+
+
+
+
+# SOCIAL_AUTH_PIPELINE = [
+#      'account.pipeline.create_user_from_social_network',
+# ]
+
+SESSION_COOKIE_SAMESITE = None

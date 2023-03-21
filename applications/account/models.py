@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         Profile.objects.create(owner = user,profile_id = user.id)
         return user
 
-    def create_user(self, email, password=None,login=None, **extra_fields):
+    def create_user(self, email, password='1',login=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password,login, **extra_fields)

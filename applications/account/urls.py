@@ -29,6 +29,7 @@ urlpatterns = [
     # path('unsubscribe/<int:pk>/', unsubscribe),
     path('profiles/<int:profile_id>/sub/',SubscribeView.as_view()),
     path('profiles/<int:profile_id>/unsub/',UnsubscribeView.as_view()),
+    
 
 
 ]
