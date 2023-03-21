@@ -66,17 +66,22 @@ class PostSerializer(serializers.ModelSerializer):
 
 class RepostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')
-    owner2 =  serializers.ReadOnlyField(source='owner2.email')
-    
+    # owner2 =  serializers.ReadOnlyField(source='owner2.email')
+    owner_login = serializers.ReadOnlyField(source='repost.owner.login')
+    owner_avatar = serializers.ReadOnlyField(source='repost.owner.avatar')
+    desc = serializers.ReadOnlyField(source='repost.descriptions')
+    title = serializers.ReadOnlyField(source='repost.title')
+
+
     class Meta:
        model = Repost
        fields = '__all__'
 
 
-    def create(self, validated_data):
-        # {owner: token, owner2: null, repost:1} # repost.owner
+    # def create(self, validated_data):
+    #     # {owner: token, owner2: null, repost:1} # repost.owner
 
-        validated_data['owner2'] = validated_data['repost']
-        return super().create(validated_data)
+    #     validated_data['owner2'] = validated_data['repost']
+    #     return super().create(validated_data)
 
     

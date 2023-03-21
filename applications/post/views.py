@@ -10,7 +10,7 @@ from applications.feedback.models import Like
 from rest_framework.decorators import action
 
 class CustomPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 100
     page_size_query_param = 'page_size'
     max_page_size = 100
 
