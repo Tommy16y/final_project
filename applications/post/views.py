@@ -1,5 +1,5 @@
 from applications.post.models import Post,PostMedia,Repost
-from applications.post.serializers import PostSerializer,PostMediaSerializer,RepostSerializer
+from applications.post.serializers import PostSerializer,PostMediaSerializer,RepostSerializer,MyPostSerializer
 from rest_framework.viewsets import ViewSet,ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets,status
@@ -8,8 +8,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from applications.feedback.models import Like
 from rest_framework.decorators import action
+from rest_framework import generics, status
+from django.contrib.auth import get_user_model  
 from applications.account.models import Profile
-from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
@@ -64,60 +65,17 @@ class RepostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]  
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)  
+        serializer.save(owner=self.request.user)         
 
 
-    # def perform_create(self, serializer):
-    #     print(Profile.objects.filter(profile_id=User.objects.filter(login=self.request.owner_login).id).avatar)
-    #     serializer.save(owner=self.request.user,owner_avatar= Profile.objects.filter(profile_id=User.objects.filter(login=self.request.owner_login).id).avatar)         
+class MyPostView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MyPostSerializer
 
 
-
-    # def perform_create(self, serializer):
-    #     serializer.save(owner=self.request.user) 
-
-    
-    
-
-#     def post(self,request,pk):
-        
-# class RepostAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     def get(self,request):
-#         reposts = Repost.objects.all()
-#         serializer = RepostSerializer(reposts,many=True)
-#         return Response(serializer.data)
-
-#     def post(self,request,pk):
-#         post = Post.objects.get(pk=pk)
-#         repost = Post(id=post.id)
-#         repost.save()
-#         return Response({'status':'ok'},status=status.HTTP_201_CREATED)    
-
-    
-
-#     def perform_create(self, serializer):
-#         serializer.save(owner=self.request.user)
-
-
-    # def post(request, post_id):
-    #     post = get_object_or_404(Post, pk=post_id)
-    #     if request.method == 'POST':
-    #         serializer = RepostSerializer(request.POST)
-    #         if serializer.is_valid():
-    #             repost = serializer.save(commit=False)
-    #             repost.post = post
-    #             repost.save()
-    #             return redirect('post_detail', pk=post.pk)
-    #     else:
-    #         serializer = RepostSerializer()
-
-    
-
-    # def perform_create(self, serializer):
-    #     serializer.save(owner=self.request.user)         
-
-        
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(owner=user)
 
 
 

@@ -190,3 +190,59 @@ class UnsubscribeView(APIView):
             return Response({'success': 'Вы отписались от аккаунта.'})
         else:
             return Response({'error': 'Вы не подписаны.'})
+        
+
+
+
+
+
+# import jwt
+# from django.conf import settings
+# from django.http import JsonResponse
+
+# def exchange_token(request):
+#     social_token = request.GET.get('social_token')  
+#     if social_token:
+#         user_data = {
+#             'id': 123, 
+#             'username': 'john',  
+            
+#         }
+#         jwt_token = jwt.encode(user_data, settings.SECRET_KEY, algorithm='HS256')
+#         return JsonResponse({'jwt_token': jwt_token})  #
+#     else:
+#         return JsonResponse({'error': 'social_token is required'}, status=400) 
+
+
+# from django.contrib.auth import authenticate, login
+# from django.http import JsonResponse
+# from rest_framework_simplejwt.settings import api_settings
+# from social_core.exceptions import MissingBackend
+# from social_django.utils import load_backend, load_strategy
+
+
+# @api_view(['POST'])
+# def exchange_token(request):
+#     # Получение access_token из запроса
+#     access_token = request.data.get('access_token')
+
+#     # Загрузка стратегии и бэкэнда
+#     strategy = load_strategy(request)
+#     backend = load_backend(strategy=strategy, name='vk-oauth2', redirect_uri=None)
+
+#     try:
+#         # Авторизация пользователя через бэкэнд
+#         user = backend.do_auth(access_token)
+#     except MissingBackend:
+#         return JsonResponse({'error': 'Backend not found'})
+
+#     if user:
+#         # Если пользователь авторизовался успешно, создаем токен JWT и отправляем его в ответе
+#         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+#         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+#         payload = jwt_payload_handler(user)
+#         token = jwt_encode_handler(payload)
+
+#         return JsonResponse({'token': token})
+#     else:
+#         return JsonResponse({'error': 'Authentication failed'})

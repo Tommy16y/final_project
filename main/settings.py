@@ -72,7 +72,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -223,7 +223,7 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 #     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 # }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=600),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -261,8 +261,9 @@ SWAGGER_SETTINGS = {
 
 AUTHENTICATION_BACKENDS = [
     # 'social_core.backends.open_id.OpenIdAuth',
-    'social_core.backends.vk.VKOAuth2',
+    'main.backends.vk_backend.CustomVKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
 ]
 
 # SOCIAL_AUTH_AUTHENTICATION_BACKENDS = {
@@ -271,9 +272,28 @@ AUTHENTICATION_BACKENDS = [
 
 # }
 
+SOCIAL_AUTH_CUSTOMVKOAUTH2_KEY = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_CUSTOMVKOAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_CUSTOMVKOAUTH2_SCOPE = ['email']
+
+
+# SOCIAL_AUTH_VK_OPENAPI_APP_ID = 'http://127.0.0.1:8000'
+
+
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 
-# SOCIAL_AUTH_VK_OPENAPI_APP_ID = 'http://127.0.0.1:8000'
+
+# SOCIAL_AUTH_VK_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'redirect_uri': 'http://127.0.0.1:8000/api/v1/auth/vk/exchange_token/'}
+
+
+
+
+
+# SOCIAL_AUTH_PIPELINE = [
+#      'account.pipeline.create_user_from_social_network',
+# ]
+
+SESSION_COOKIE_SAMESITE = None
