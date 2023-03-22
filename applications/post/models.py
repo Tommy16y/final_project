@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from applications.account.models import Profile
 
 User = get_user_model()
 
@@ -24,9 +25,11 @@ class PostMedia(models.Model):
 
 class Repost(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name='repostsss')
-    repost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='reposttt')
+    repost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='repostsss')
     created_at = models.DateTimeField(auto_now_add=True)
-    owner2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reposts2',verbose_name='владелец репоста')
+    # avatar = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='avatar')
+    
+    # owner2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reposts2',verbose_name='владелец репоста')
 
 
     def __str__(self):
