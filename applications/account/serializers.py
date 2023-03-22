@@ -4,6 +4,9 @@ from applications.account.send_email import  send_reset_password_code
 from applications.account.task import send_activation_code as celery_register
 # from applications.feedback.models import Following
 from applications.account.models import Profile
+from applications.post.models import Post
+from applications.post.serializers import PostSerializer
+
 
 import datetime
 User = get_user_model()  # CustomUser
@@ -45,8 +48,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Profile.objects.create(owner = user,profile_id = user.id)
         
         return user
-
-
+    
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
 
@@ -63,8 +65,6 @@ class ForgotPasswordSerializer(serializers.Serializer):
         user.save()
         send_reset_password_code(email=email, code=user.activation_code)
         
-
-
 class ForgotPasswordCompleteSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, min_length=6)
     password_confirm = serializers.CharField(required=True, min_length=6)
@@ -91,9 +91,6 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         user.activation_code = ''
         user.save(update_fields=['password', 'activation_code'])
 
-
-
-
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
@@ -116,15 +113,10 @@ class UsersSerializer(serializers.ModelSerializer):
         model = User
         fields = ('login',)
 
-
 class UserrSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('login','created_at',)
-
-   
-
-
 
 class ProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=False)
@@ -171,19 +163,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
-
-
-# class SubSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields = ['profile_id', 'owner', 'followers', 'following']
-#         read_only_fields = ['profile_id','owner'm']
-
-
-
 class SubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'login', 'followers', 'following']
         read_only_fields = ['id', 'login']
+
+
+
+class ProfileAvatarSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField()
+
+    class Meta:
+        model = Profile
+        fields = ('avatar',)

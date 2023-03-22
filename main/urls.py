@@ -21,7 +21,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from applications.account.views import VkAuthView
-
+# from applications.account.views import exchange_token
 
 schema_view = get_schema_view(
     
@@ -44,8 +44,9 @@ urlpatterns = [
     path('api/v1/auth/vk/', include('social_django.urls', namespace='social')),
     path('auth/token/', TokenObtainPairView.as_view, name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view, name='token_refresh'),
+    path('api/v1/auth/vk/login/<str:backend>/', include('social_django.urls', namespace='sociall')),
 
     path('api/v1/auth/vk/token/', VkAuthView.as_view()),
-
+    #  path('api/v1/auth/vk/exchange_token/', exchange_token, name='exchange_token'),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

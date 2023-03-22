@@ -11,6 +11,7 @@ router.register('',PostModelViewSet)
 
 urlpatterns = [
     # path('likeon',like),
+    path('mypost/',MyPostView.as_view()),
     path('',include(router.urls)),
     # path('repost/',RepostAPIView.as_view())
     
