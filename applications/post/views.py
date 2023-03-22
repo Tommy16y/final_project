@@ -17,10 +17,10 @@ from django.views.decorators.cache import cache_page
 User = get_user_model()
 
 
-class CustomPagination(PageNumberPagination):
-    page_size = 100
-    page_size_query_param = 'page_size'
-    max_page_size = 100
+# class CustomPagination(PageNumberPagination):
+#     page_size = 100
+#     page_size_query_param = 'page_size'
+#     max_page_size = 100
 
 @method_decorator(cache_page(120),name='dispatch')
 class PostModelViewSet(viewsets.ModelViewSet):
