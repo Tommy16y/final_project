@@ -68,7 +68,7 @@ class RepostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')
     # owner2 =  serializers.ReadOnlyField(source='owner2.email')
     owner_login = serializers.ReadOnlyField(source='repost.owner.login')
-    owner_avatar = serializers.ReadOnlyField(source='repost.owner.avatar')
+    owner_avatar = serializers.ReadOnlyField(source='repost.avatar')
     desc = serializers.ReadOnlyField(source='repost.descriptions')
     title = serializers.ReadOnlyField(source='repost.title')
 
@@ -83,5 +83,7 @@ class RepostSerializer(serializers.ModelSerializer):
 
     #     validated_data['owner2'] = validated_data['repost']
     #     return super().create(validated_data)
-
-    
+    # def to_representation(self, instance):
+        # representation= super().to_representation(instance)
+        # aavv = instance.repost.all()
+        # print(aavv)

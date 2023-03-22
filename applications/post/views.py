@@ -8,18 +8,25 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from applications.feedback.models import Like
 from rest_framework.decorators import action
+from applications.account.models import Profile
+from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+User = get_user_model()
+
 
 class CustomPagination(PageNumberPagination):
     page_size = 100
     page_size_query_param = 'page_size'
     max_page_size = 100
 
-
+@method_decorator(cache_page(120),name='dispatch')
 class PostModelViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = CustomPagination    
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @action(methods=['POST'],detail=True)  # lokalhost:8000/api/v1/post/15/like/
     def like(self,request,pk,*args,**kwargs):
@@ -41,6 +48,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
 class PostMediaModelViewSet(viewsets.ModelViewSet):
     queryset = PostMedia.objects.all()
     serializer_class = PostMediaSerializer
@@ -55,9 +63,13 @@ class RepostModelViewSet(viewsets.ModelViewSet):
     serializer_class = RepostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  
 
-
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)         
+        serializer.save(owner=self.request.user)  
+
+
+    # def perform_create(self, serializer):
+    #     print(Profile.objects.filter(profile_id=User.objects.filter(login=self.request.owner_login).id).avatar)
+    #     serializer.save(owner=self.request.user,owner_avatar= Profile.objects.filter(profile_id=User.objects.filter(login=self.request.owner_login).id).avatar)         
 
 
 

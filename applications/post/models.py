@@ -25,7 +25,7 @@ class PostMedia(models.Model):
 
 class Repost(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name='repostsss')
-    repost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='reposttt')
+    repost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='repostsss')
     created_at = models.DateTimeField(auto_now_add=True)
     # avatar = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='avatar')
     
