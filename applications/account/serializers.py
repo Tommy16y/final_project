@@ -171,3 +171,9 @@ class SubSerializer(serializers.ModelSerializer):
 
 
 
+class ProfileAvatarSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField()
+
+    class Meta:
+        model = Profile
+        fields = ('avatar',)

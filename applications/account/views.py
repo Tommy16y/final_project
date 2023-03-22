@@ -149,7 +149,7 @@ class ProfileUpdateAPIView(generics.GenericAPIView):
 
     def get_object(self):
         return self.request.user.profile
-    
+
     def patch(self, request, *args, **kwargs):
         profile_instance = self.get_object()
         profile_serializer = self.get_serializer(
