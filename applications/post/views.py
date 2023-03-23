@@ -26,7 +26,7 @@ User = get_user_model()
 class PostModelViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    pagination_class = CustomPagination    
+    # pagination_class = CustomPagination    
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     @action(methods=['POST'],detail=True)  # lokalhost:8000/api/v1/post/15/like/
